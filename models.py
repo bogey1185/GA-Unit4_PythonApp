@@ -41,28 +41,28 @@ class Poll(Model):
   private     = BooleanField(default=False) #if true, poll won't be viewable by public. Will only be accessible through invite code.
 
   class Meta: 
-    database: DATABASE
+    database = DATABASE
 
-class Response(Model):
+class Response(Model):       
   poll_id = ForeignKeyField(Poll, backref='poll') #each response belongs to a poll question
   text    = TextField() #each poll response has text
 
   class Meta: 
-    database: DATABASE
+    database = DATABASE
 
 class Vote(Model):                        
   user_id     = ForeignKeyField(User, backref='voter') # each vote is cast by a user, which is stored here
   response_id = ForeignKeyField(Response, backref='response') # each vote is applied to a particular response, which itself is tied to a particlar poll
 
   class Meta: 
-    database: DATABASE
+    database = DATABASE
 
 class Membership(Model): #this model links users to polls so that a user's homepage can list all polls they are related to. User can add more polls by clicking "follow" on a poll's show page
   user_id = ForeignKeyField(User, backref='user')
   poll_Id = ForeignKeyField(Poll, backref='poll')
 
   class Meta: 
-    database: DATABASE
+    database = DATABASE
 
 def initialize():
   DATABASE.connect()
