@@ -10,7 +10,7 @@ class Poll(Model):
   created_by = ForeignKeyField(User, backref='author') #ref to author of poll
   active = BooleanField(default=True) #whether poll is active based on expiration date
   hashcode = CharField() #invite code used to access poll directly
-  private = BooleanField(default=False) 
+  private = BooleanField(default=False) #if true, poll won't be viewable by public. Will only be accessible through invite code.
 
 class Response(Model):
   poll_id = ForeignKeyField(Poll, backref='poll') #each response belongs to a poll question
