@@ -39,7 +39,7 @@ def after_request(response):
 def register():
     form = forms.registerForm()
     if form.validate_on_submit():
-        flash("Congrats, You registered successfully")
+        flash("Congrats, You registered successfully", "success")
         models.User.create_user(
             #these are the field we have now, might have to modify later
             username = form.username.data,
@@ -49,7 +49,26 @@ def register():
             )
         return redirect(url_for("index"))
     return render_template("register.html", form = form)
-    # need to make sure register.html is the right file
+    # need to make sure register.html is the righty named file
+
+@app.route('/login', methods=('GET', 'POST'))
+def login():
+    form = forms.LoginForm()
+    if form.validate_on_submit():
+        try:
+            user = models.User.get(models.User.email == form.email.data)
+        except models.DoesNotExist:
+            flash('Your email or password does not match', 'error')
+        else:
+            if check_password_hash(user.password, form.password.data):
+                login_user(user)
+
+                return redirect(url_for('index'))
+
+            else:
+                flash('Your email or password doesnt match', 'error')
+
+    return render_template('login.html', form=form)
 
 
 @app.route("/")
