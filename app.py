@@ -34,7 +34,7 @@ def after_request(response):
     g.db.close()
     return response
 
-
+# register route
 @app.route("/register", method = ("GET", "POST"))
 def register():
     form = forms.registerForm()
@@ -51,6 +51,7 @@ def register():
     return render_template("register.html", form = form)
     # need to make sure register.html is the righty named file
 
+#login route
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     form = forms.LoginForm()
@@ -58,6 +59,7 @@ def login():
         try:
             user = models.User.get(models.User.email == form.email.data)
         except models.DoesNotExist:
+            # need to create model for this
             flash('Your email or password does not match', 'error')
         else:
             if check_password_hash(user.password, form.password.data):
@@ -69,6 +71,34 @@ def login():
                 flash('Your email or password doesnt match', 'error')
 
     return render_template('login.html', form=form)
+
+# logout route
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("You have been log out", "success")
+    return redirect(url_for("index"))
+
+
+# new poll-form route
+# this whole thing might break up with syntax error, so we need to be 
+    #extra careful and double check everything later.
+@app.route("/new_poll", methods = ("GET", "POST"))
+@login_required
+def poll():
+    form = forms.PollForm()
+    if form.validate_on_submit():
+        models.Poll.create(user=g.user._get_current_object(),
+                           content=form.content.data.strip())
+        flash('Your poll have been posted', 'success')
+        return redirect(url_for('index'))
+
+    # get route
+    return render_template('polls.html', form=form)
+# file and forms' names need to be double checked
+
+
 
 
 @app.route("/")
