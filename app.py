@@ -100,7 +100,7 @@ def poll():
 
 
 
-
+##need to change the return value on this route, this is just for now.
 @app.route("/")
 def hello_world():
     return "hello world"
