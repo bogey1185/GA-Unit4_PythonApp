@@ -7,7 +7,7 @@ from flask_bcrypt import check_password_hash
 import models
 import forms
 
-app = flask(__name__)
+app = Flask(__name__)
 
 app.secret_key = ""
 login_manager = LoginManager()
