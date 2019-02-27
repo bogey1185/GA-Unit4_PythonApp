@@ -1,6 +1,4 @@
 .env
 config.py
-__pycache__
-.DS_Store
 pollsterdatabase.sqlite
-test-file
+
