@@ -1,4 +1,4 @@
 .env
 config.py
 pollsterdatabase.sqlite
-
+.DS_Store
