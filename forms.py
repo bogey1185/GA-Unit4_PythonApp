@@ -72,8 +72,6 @@ class LoginForm(Form):
     validators=[DataRequired()]
   )
 
-class CreatePoll(Form):
+# class CreatePoll(Form):
 
-
-#test
 
