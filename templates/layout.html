@@ -23,9 +23,20 @@
         </div>
 
         <br><br>
+<!--- All the names like poll, index, invitecode etc need to be double checked later because
+they dont even exist yet-->
+        <div class = "mainpage">
+            <div classname = "startpoll">
+                <a href="{{ url_for('poll') }}">Start a Poll</a>
+            </div>
 
-        <div>
+            <div class = "browsepoll">
+                <a href="{{ url_for('index') }}">Browse Polls</a>
+            </div>
 
+            <div class = "invite">
+                <a href="{{ url_for('invitecode') }}">Join poll with a code</a>
+            </div>
         </div>
     </div>
 </body>
