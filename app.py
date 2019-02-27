@@ -21,6 +21,35 @@ def load_user(userid):
     except models.DoesNotExist:
         return None
 
+@app.before_request
+def before_request():
+    """Connect to the database before each request"""
+    g.db = models.DATABASE
+    g.db.connect()
+    g.user = current_user
+
+@app.after_request
+def after_request(response):
+    """Close the databases connection after each request"""
+    g.db.close()
+    return response
+
+
+@app.route("/register", method = ("GET", "POST"))
+def register():
+    form = forms.registerForm()
+    if form.validate_on_submit():
+        flash("Congrats, You registered successfully")
+        models.User.create_user(
+            #these are the field we have now, might have to modify later
+            username = form.username.data,
+            email = form.email.data,
+            password = form.password.data
+            ## confirm_password = form.confirm_password.data
+            )
+        return redirect(url_for("index"))
+    return render_template("register.html", form = form)
+    # need to make sure register.html is the right file
 
 
 @app.route("/")
