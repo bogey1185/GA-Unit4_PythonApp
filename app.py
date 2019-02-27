@@ -37,8 +37,8 @@ def after_request(response):
 
 #need to change the return value on this route, this is just for now.
 @app.route("/")
-def hello_world():
-    return "hello world"
+def index():
+    return render_template('layout.html')
 
 #register route
 @app.route("/register", methods=("GET", "POST"))
@@ -46,11 +46,12 @@ def register():
     form = forms.RegisterForm()
     if form.validate_on_submit():
         flash("Congrats, You registered successfully!", "success")
-        models.User.create_user(
+        newUser = models.User.create_user(
             username = form.username.data,
             email = form.email.data,
             password = form.password.data
         )
+        login_user(newUser)
         return redirect(url_for("index"))
     return render_template("register.html", form=form)
     # need to make sure register.html is the right file name
