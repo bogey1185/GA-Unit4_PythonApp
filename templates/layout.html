@@ -18,6 +18,7 @@
             <div class = "loginlogout">
                 {% if current_user.is_authenticated %}
                     <a href="{{url_for('logout')}}" title="logout">Logout</a>
+                    <a href="{{url_for('new_poll')}}" title="new_poll">Create Poll</a>
                 {% else %}
                     <a href="{{url_for('login')}}" title="login">Login</a>
                     <a href="{{url_for('register')}}" title="register">register</a>

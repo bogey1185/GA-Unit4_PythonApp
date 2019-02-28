@@ -35,10 +35,22 @@ def after_request(response):
     g.db.close()
     return response
 
+#################################
+#                               #
+#        Routes                 #
+#                               #
+#################################
+
 #need to change the return value on this route, this is just for now.
 @app.route("/")
 def index():
     return render_template('layout.html')
+
+        #################################
+        #                               #
+        #        Auth Routes            #
+        #                               #
+        #################################
 
 #register route
 @app.route("/register", methods=("GET", "POST"))
@@ -84,10 +96,16 @@ def logout():
     flash("You have been logged out.", "success")
     return redirect(url_for("index"))
 
+        #################################
+        #                               #
+        #        Create New Poll        #
+        #                               #
+        #################################
+
 # new poll route
 @app.route("/new_poll", methods=("GET", "POST"))
 @login_required
-def poll():
+def new_poll():
     form = forms.PollForm()
     if form.validate_on_submit():
 
