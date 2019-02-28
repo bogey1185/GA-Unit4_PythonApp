@@ -32,10 +32,10 @@ class User(UserMixin, Model):
       raise Exception('Email address already in use.')
 
 class Poll(Model):
-  created_by      = ForeignKeyField(User, backref='user') #ref to author of poll
+  created_by      = ForeignKeyField(User, backref='user') #ref to author of poll (id#, not username)
+  created_by_user = CharField() #username of creator
   date            = DateTimeField(default=datetime.datetime.now) #the date and time the poll was created
-  expiration_date = DateField() #the date the poll expires. default set to 24 hours or so?
-  expiration_time = TimeField() #time of expirate on exp date
+  expiration_date = DateField() #the date the poll expires. 
   hashcode        = CharField() #invite code used to access poll directly
   question        = TextField() #the poll question
   active          = BooleanField(default=True) #whether poll is active based on expiration date
