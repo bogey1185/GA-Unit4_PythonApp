@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class = "allpolls">
+    <div class = "activepolls">
+        <h3>Active polls</h3>
+        {% for polls in stream %}
+            <!--looking for logic to see if the polls have expired.
+            Expired polls go below -->
+        {% endfor %}
+    </div>
+<br>
+    <div class = "expiredpolls">
+        <h3>Expired polls</h3>
+    </div>
+</div>
+
+{% endblock %}

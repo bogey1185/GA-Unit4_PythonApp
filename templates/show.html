@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+
+    <div>
+      <p>----------------------</p>
+      <p>{{stream.question}} | {{stream.date}} | {{stream.hashcode}}</p>
+    </div>
+
+
+  {% for response in responses %} 
+
+    <div>
+      <p>----------------------</p>
+      <p>{{response.text}} | {{response.sequence}}</p>
+    </div>
+
+  {% endfor %}
+
+
+
+{% endblock %}
