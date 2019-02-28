@@ -24,8 +24,10 @@
 
         <br><br>
 <!--- All the names like poll, index, invitecode etc need to be double checked later because
-they dont even exist yet-->
+they dont even exist yet(even the login, logout and register"
+-->
         <div class = "mainpage">
+            <nav>
             <div classname = "startpoll">
                 <a href="{{ url_for('poll') }}">Start a Poll</a>
             </div>
@@ -37,6 +39,7 @@ they dont even exist yet-->
             <div class = "invite">
                 <a href="{{ url_for('invitecode') }}">Join poll with a code</a>
             </div>
+            </nav>
         </div>
     </div>
 </body>
