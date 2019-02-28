@@ -7,7 +7,12 @@
     {{ form.hidden_tag() }}
 
     {% for field in form %}
+    
+      <h4>{{ 'Expiration date:' if field.__dict__['id'] == 'expiration_date' else '' }}</h4> 
+      <h4>{{ 'Expiration time:' if field.__dict__['id'] == 'expiration_time' else '' }}</h4> 
+      <h4>{{ 'Is this poll public or private?' if field.__dict__['id'] == 'private' else '' }}</h4>
       {{render_field(field)}}
+      
     {% endfor %}
     <button type="submit">Submit Poll</button>
   </form>
