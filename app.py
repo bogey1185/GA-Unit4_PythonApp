@@ -167,7 +167,7 @@ def stream():
     #in order to make sure database is continually updating and keeping the active property
     #properly set to True or False depending on whether active, this quick loop runs when
     #the stream route is run. It updates active status for db entries based on date.
-    
+
     for poll in expired_polls:
         if poll.active:
             poll.active = False
@@ -180,15 +180,43 @@ def stream():
 def show_poll(hashcode):
 
     #get poll
-    stream = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
+    poll = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
     #get responses associated with poll
-    responses = models.Response.select().where(models.Response.poll_id == stream.__data__['id']).order_by(models.Response.sequence)
+    responses = models.Response.select().where(models.Response.poll_id == poll.__data__['id']).order_by(models.Response.sequence)
+    
+    #checks if current user voted on the poll
+    try:
+        vote = models.Vote.get(models.Vote.user_id == g.user._get_current_object() and models.Vote.poll_id == poll.__data__['id'])
+    except models.DoesNotExist:
+        vote = None
 
-    return render_template('/show.html', stream=stream, responses=responses)
+    return render_template('/show.html', poll=poll, responses=responses, vote=vote)
 
+#cast vote
+@app.route('/stream/<hashcode>/vote/<responseid>')
+def vote(hashcode, responseid):
+
+    poll = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
+
+    vote = models.Vote.create(
+        user_id = g.user._get_current_object(),   
+        response_id = responseid,
+        poll_id = poll.__data__['id']
+    )
+    print(poll.__data__, 'POLL')
+    print(vote.__data__, 'VOTE')
+
+    return redirect('/stream/' + hashcode)
 
 if __name__ == '__main__':
     models.initialize()
     app.run(debug = config.DEBUG, port = config.PORT)
+
+
+
+
+
+
+
 
 

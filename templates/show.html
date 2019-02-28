@@ -5,17 +5,19 @@
 
 
     <div>
-      <p>----------------------</p>
-      <p>{{stream.question}} | {{stream.date}} | {{stream.hashcode}}</p>
+      <p>{{poll.question}} | {{poll.date}} | {{poll.hashcode}}</p>
     </div>
 
 
   {% for response in responses %} 
 
-    <div>
-      <p>----------------------</p>
-      <p>{{response.text}} | {{response.sequence}}</p>
-    </div>
+    {% if vote %}
+      <p>bar</p>
+
+    {% else %}
+      <a href="/stream/{{poll.hashcode}}/vote/{{response.id}}"><p>{{response.sequence}}. {{response.text}}</p></a>
+
+    {% endif %}
 
   {% endfor %}
 
