@@ -2,7 +2,9 @@ from flask_wtf import FlaskForm as Form
 
 from models import User, Poll, Response, Vote, Membership
 
-from wtforms import StringField, PasswordField, TextAreaField, BooleanField, DateTimeField
+from wtforms import StringField, PasswordField, TextAreaField, BooleanField, DateTimeField, RadioField
+
+from wtforms.fields.html5 import DateField, TimeField
 
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email, Length, EqualTo)
 
@@ -72,6 +74,43 @@ class LoginForm(Form):
     validators=[DataRequired()]
   )
 
-# class CreatePoll(Form):
+class PollForm(Form):
+  expiration_date = DateField(validators=[DataRequired()])
+  expiration_time = TimeField(validators=[DataRequired()])
+  private   = RadioField(
+    'Is this poll public or private?', 
+    choices=[('public','Public'),('private','Private')],
+    validators=[DataRequired()]
+  )
+  question  = StringField('Your poll question...', validators=[DataRequired()])
+  response1 = StringField('Response A', validators=[DataRequired()])
+  response2 = StringField('Response B', validators=[DataRequired()])
+  response3 = StringField('Response C', default=None)
+  response4 = StringField('Response D', default=None)
+
+
+
+
+
+ 
+ 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
