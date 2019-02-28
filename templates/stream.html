@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+  {% for poll in stream %} 
+
+    <div>
+      <p>----------------------</p>
+      <p>{{poll.question}} | {{poll.date}} | {{poll.hashcode}}</p>
+    </div>
+
+  {% endfor %}
+
+
+
+{% endblock %}

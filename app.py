@@ -125,13 +125,13 @@ def new_poll():
             private         = form.private.data
         )
 
-        #make new membership entry to associate poll creator with poll
+        #make new membership entry to relate creator with poll
         new_member = models.Membership.create(
             user_id = g.user._get_current_object(),
             poll_id = new_poll.__data__['id']
         )
 
-        #gather responses from fields
+        #gather field responses
         responses = [form.response1.data, form.response2.data, form.response3.data, form.response4.data]
 
         #for any completed responses, create responses in sequence so they can be reconstructed later
@@ -148,6 +148,19 @@ def new_poll():
 
     # get route
     return render_template('new_poll.html', form=form)
+
+        #################################
+        #                               #
+        #        Show all polls         #
+        #                               #
+        #################################
+
+@app.route('/stream')
+def stream():
+    stream = models.Poll.select().where(models.Poll.private == 'public').order_by(models.Poll.date)
+    print(stream)
+    return render_template('stream.html', stream=stream)
+
 
 if __name__ == '__main__':
     models.initialize()
