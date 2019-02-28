@@ -1,6 +1,7 @@
 from flask import Flask, g, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_bcrypt import check_password_hash
+import datetime
 import random
 import config
 import models
@@ -118,13 +119,15 @@ def new_poll():
         #make new poll
         new_poll = models.Poll.create(
             created_by      = g.user._get_current_object(),
+            created_by_user = g.user._get_current_object().username,
             expiration_date = form.expiration_date.data,
-            expiration_time = form.expiration_time.data,
             hashcode        = hash,
             question        = form.question.data.strip(),
             private         = form.private.data
         )
-
+        print(new_poll.__data__['expiration_date'], "EXPIRY DATE")
+        # print(type(new_poll.__data__['expiration_date'], "DATATYPE FOR DATE"))
+        print(datetime.date.today(), "CURRENT DATE")
         #make new membership entry to relate creator with poll
         new_member = models.Membership.create(
             user_id = g.user._get_current_object(),
@@ -158,29 +161,52 @@ def new_poll():
 #show all public polls route
 @app.route('/stream')
 def stream():
-    stream = models.Poll.select().where(models.Poll.private == 'public').order_by(models.Poll.date)
-    return render_template('stream.html', stream=stream)
+    active_polls = models.Poll.select().where(models.Poll.expiration_date >= datetime.date.today()).order_by(models.Poll.expiration_date)
+    expired_polls = models.Poll.select().where(models.Poll.expiration_date < datetime.date.today()).order_by(-models.Poll.date)
+
+    #in order to make sure database is continually updating and keeping the active property
+    #properly set to True or False depending on whether active, this quick loop runs when
+    #the stream route is run. It updates active status for db entries based on date.
+
+    for poll in expired_polls:
+        if poll.active:
+            poll.active = False
+            poll.save()
+
+    return render_template('stream.html', active_polls=active_polls, expired_polls=expired_polls)
 
 #show specific poll
 @app.route('/stream/<hashcode>')
 def show_poll(hashcode):
 
     #get poll
-    stream = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
+    poll = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
     #get responses associated with poll
-    responses = models.Response.select().where(models.Response.poll_id == stream.__data__['id']).order_by(models.Response.sequence)
-
-    return render_template('/show.html', stream=stream, responses=responses)
-
-#show all the polls created by the user.
-@app.route('/user_polls', METHOD = "GET")
-def user_polls():
-    stream = models.Poll.select().where(user == user_id).order_by(models.Poll.date)
+    responses = models.Response.select().where(models.Response.poll_id == poll.__data__['id']).order_by(models.Response.sequence)
     
+    #checks if current user voted on the poll
+    try:
+        vote = models.Vote.get(models.Vote.user_id == g.user._get_current_object() and models.Vote.poll_id == poll.__data__['id'])
+    except models.DoesNotExist:
+        vote = None
 
+    return render_template('/show.html', poll=poll, responses=responses, vote=vote)
+
+#cast vote
+@app.route('/stream/<hashcode>/vote/<responseid>')
+def vote(hashcode, responseid):
+
+    poll = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
+
+    vote = models.Vote.create(
+        user_id = g.user._get_current_object(),   
+        response_id = responseid,
+        poll_id = poll.__data__['id']
+    )
+
+    return redirect('/stream/' + hashcode)
 
 if __name__ == '__main__':
     models.initialize()
     app.run(debug = config.DEBUG, port = config.PORT)
-
 

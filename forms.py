@@ -4,7 +4,7 @@ from models import User, Poll, Response, Vote, Membership
 
 from wtforms import StringField, PasswordField, TextAreaField, BooleanField, DateTimeField, RadioField
 
-from wtforms.fields.html5 import DateField, TimeField
+from wtforms.fields.html5 import DateField
 
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email, Length, EqualTo)
 
@@ -76,7 +76,6 @@ class LoginForm(Form):
 
 class PollForm(Form):
   expiration_date = DateField(validators=[DataRequired()])
-  expiration_time = TimeField(validators=[DataRequired()])
   private   = RadioField(
     'Is this poll public or private?', 
     choices=[('public','Public'),('private','Private')],
