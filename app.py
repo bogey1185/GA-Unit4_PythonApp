@@ -98,7 +98,7 @@ def logout():
 
         #################################
         #                               #
-        #        Create New Poll        #
+        #     Create New Poll route     #
         #                               #
         #################################
 
@@ -151,7 +151,7 @@ def new_poll():
 
         #################################
         #                               #
-        #        Show pages             #
+        #        Show routes            #
         #                               #
         #################################
 
@@ -159,7 +159,6 @@ def new_poll():
 @app.route('/stream')
 def stream():
     stream = models.Poll.select().where(models.Poll.private == 'public').order_by(models.Poll.date)
-    print(stream)
     return render_template('stream.html', stream=stream)
 
 #show specific poll
@@ -172,6 +171,8 @@ def show_poll(hashcode):
     responses = models.Response.select().where(models.Response.poll_id == stream.__data__['id']).order_by(models.Response.sequence)
 
     return render_template('/show.html', stream=stream, responses=responses)
+
+
 
 if __name__ == '__main__':
     models.initialize()

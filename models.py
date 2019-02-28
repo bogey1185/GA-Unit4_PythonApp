@@ -56,11 +56,11 @@ class Response(Model):
   class Meta: 
     database = DATABASE
 
-class Vote(Model):                        
+class Vote(Model): #tracks votes on polls!                     
   user_id     = ForeignKeyField(User, backref='voter') # each vote is cast by a user, which is stored here
   response_id = ForeignKeyField(Response, backref='response') # each vote is applied to a particular response, which itself is tied to a particlar poll
   poll_id  = ForeignKeyField(Poll, backref='poll')
-  
+
   class Meta: 
     database = DATABASE
 
