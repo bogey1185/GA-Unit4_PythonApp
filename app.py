@@ -203,8 +203,6 @@ def vote(hashcode, responseid):
         response_id = responseid,
         poll_id = poll.__data__['id']
     )
-    print(poll.__data__, 'POLL')
-    print(vote.__data__, 'VOTE')
 
     return redirect('/stream/' + hashcode)
 

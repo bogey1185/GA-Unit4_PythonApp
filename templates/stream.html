@@ -17,7 +17,7 @@
   <h1>Expired Polls</h1>
 
   {% for poll in expired_polls %} 
-
+    
     <a href="/stream/{{poll.hashcode}}">
       <div class="expiredpoll">
         <h4>{{poll.question}} | <small> By: {{poll.created_by_user}}</small></h4>
