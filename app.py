@@ -151,16 +151,27 @@ def new_poll():
 
         #################################
         #                               #
-        #        Show all polls         #
+        #        Show pages             #
         #                               #
         #################################
 
+#show all public polls route
 @app.route('/stream')
 def stream():
     stream = models.Poll.select().where(models.Poll.private == 'public').order_by(models.Poll.date)
     print(stream)
     return render_template('stream.html', stream=stream)
 
+#show specific poll
+@app.route('/stream/<hashcode>')
+def show_poll(hashcode):
+
+    #get poll
+    stream = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
+    #get responses associated with poll
+    responses = models.Response.select().where(models.Response.poll_id == stream.__data__['id']).order_by(models.Response.sequence)
+
+    return render_template('/show.html', stream=stream, responses=responses)
 
 if __name__ == '__main__':
     models.initialize()
