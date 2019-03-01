@@ -216,7 +216,9 @@ def show_poll(hashcode):
         votecount.append(respvotes)
         votetotal += respvotes
 
-    vote_percentages = [round((num / votetotal)*100, 2) for num in votecount]
+    #need to set this in a ternary because before you have your first vote, you will get a divide by zero error 
+    # due to the num / votetotal
+    vote_percentages = [round((num / votetotal)*100, 2) for num in votecount] if votetotal > 0 else [0, 0, 0, 0]
     
     #if the poll activity is false (meaning expired), or there is no login
     # register it as voted upon so only results show. #No voting allowed!
