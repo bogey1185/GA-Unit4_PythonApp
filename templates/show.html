@@ -10,7 +10,28 @@
   {% for response in responses %} 
 
     {% if vote %}
-      <p>{{response.sequence}}. {{response.text}}: {{votecount[response.sequence - 1]}} {{'vote' if votecount[response.sequence - 1] == 1 else 'votes'}}. {{vote_percentages[response.sequence - 1]}}%</p>
+
+      <style type="text/css">
+        @keyframes bar-anim {
+          from {width: 0;}
+        }
+      </style>
+
+      <div class="bar">
+        <p>{{response.sequence}}. {{response.text}}: {{votecount[response.sequence - 1]}} {{'vote' if votecount[response.sequence - 1] == 1 else 'votes'}}.</p>
+        <div class="graphbar">
+          <div style="
+            background-color:blue; 
+            height:20px; 
+            width: {{(vote_percentages[response.sequence - 1])}}%;
+            animation-name: bar-anim;
+            animation-duration: 1.5s;
+            animation-fill-mode: forwards;
+          "></div>
+          <text>{{vote_percentages[response.sequence - 1]}}%</text>
+        </div>
+
+      </div>
 
     {% else %}
       <a href="/stream/{{poll.hashcode}}/vote/{{response.id}}"><p>{{response.sequence}}. {{response.text}}</p></a>

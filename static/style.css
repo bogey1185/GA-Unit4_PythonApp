@@ -1,0 +1,7 @@
+.graphbar {
+  display: flex;
+}
+
+text {
+  padding-left: 10px;
+}

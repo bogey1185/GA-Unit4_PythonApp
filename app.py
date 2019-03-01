@@ -45,7 +45,7 @@ def after_request(response):
 #need to change the return value on this route, this is just for now.
 @app.route("/")
 def index():
-    return render_template('layout.html')
+    return render_template('index.html')
 
         #################################
         #                               #
@@ -172,18 +172,6 @@ def stream():
         if poll.active:
             poll.active = False
             poll.save()
-
-
-    pollcount = models.Poll.select().count()
-    print(pollcount, "YEAHAHAHAHAH POLLCOUNT")
-
-    respcount = models.Response.select().count()
-    print(respcount, "YAYAYAYA RESP COUNT")
-
-    votecount = models.Vote.select().count()
-    print(votecount, "YAYAY VOTE COUNT")
-
-  
 
     return render_template('stream.html', active_polls=active_polls, expired_polls=expired_polls)
 

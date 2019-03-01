@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+  <div class='bodynav'>
+
+    <div class="bodynav-browse"><a href="/stream">Browse Polls</a></div>
+    <div class="bodynav-create"><a href="/new_poll">Create Poll</a></div>
+    <div class="bodynav-code">
+      <form>
+        <input type="text" id="hashcode" name="hashcode" />
+        <button id="btn" type="submit">Submit</button>
+      </form> 
+    </div>
+
+  </div>
+
+{% endblock %}
