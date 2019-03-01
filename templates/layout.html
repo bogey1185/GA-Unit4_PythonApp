@@ -19,9 +19,11 @@
                 {% if current_user.is_authenticated %}
                     <a href="{{url_for('logout')}}" title="logout">Logout</a>
                     <a href="{{url_for('new_poll')}}" title="new_poll">Create Poll</a>
+                    <a href="{{url_for('stream')}}" title="stream">Browse Polls</a>
                 {% else %}
                     <a href="{{url_for('login')}}" title="login">Login</a>
                     <a href="{{url_for('register')}}" title="register">register</a>
+                    <a href="{{url_for('stream')}}" title="stream">Browse Polls</a>
                 {% endif %} 
             </div>
         </div>

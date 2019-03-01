@@ -145,7 +145,7 @@ def new_poll():
                 )            
        
         flash('Your poll have been posted', 'success')
-        return redirect(url_for('index'))
+        return redirect(url_for('stream'))
 
     # get route
     return render_template('new_poll.html', form=form)
@@ -161,8 +161,8 @@ def new_poll():
 @app.route('/stream/')
 def stream():
     #get all active and expired polls that are public
-    active_polls = models.Poll.select().where(models.Poll.expiration_date >= datetime.date.today() and models.Poll.private == 'public').order_by(models.Poll.expiration_date)
-    expired_polls = models.Poll.select().where(models.Poll.expiration_date < datetime.date.today() and models.Poll.private == 'public').order_by(-models.Poll.date)
+    active_polls = models.Poll.select().where((models.Poll.expiration_date >= datetime.date.today()) & (models.Poll.private == 'public')).order_by(models.Poll.expiration_date)
+    expired_polls = models.Poll.select().where((models.Poll.expiration_date < datetime.date.today()) & (models.Poll.private == 'public')).order_by(-models.Poll.date)
 
     #in order to make sure database is continually updating and keeping the active property
     #properly set to True or False depending on whether poll is active, this quick loop runs when
