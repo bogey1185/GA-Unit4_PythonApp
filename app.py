@@ -175,6 +175,31 @@ def stream():
 
     return render_template('stream.html', active_polls=active_polls, expired_polls=expired_polls)
 
+
+#Userpage for specific user
+@app.route('/stream/userid')
+def user_page():
+
+    active_polls = models.Poll.select().where((models.Poll.expiration_date >= datetime.date.today()) & (models.Poll.created_by_user == models.User.username)).order_by(models.Poll.expiration_date)
+    expired_polls = models.Poll.select().where((models.Poll.expiration_date < datetime.date.today()) & (models.Poll.created_by_user == models.User.username)).order_by(-models.Poll.date)
+    
+    if username and username != current_user.username:
+        
+        user = models.User.select().where(models.User.username**username).get()
+        
+        stream = user.posts.limit(10)
+    else:
+        stream = current_user.get_stream().limit(10)
+        user = current_user
+    if username:
+        template = 'userpage.html'
+
+
+
+    return render_template("stream.html", active_polls=active_polls, expired_polls=expired_polls )
+
+
+
 #show specific poll
 
 @app.route('/stream/<hashcode>')
@@ -266,12 +291,4 @@ def follow(hashcode, poll):
 if __name__ == '__main__':
     models.initialize()
     app.run(debug = config.DEBUG, port = config.PORT)
-
-
-
-
-
-
-
-
 

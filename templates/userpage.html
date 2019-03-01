@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h3>Active polls</h3>
+{% for polls in active_polls %}
+
+    <div class = "activepolls">
+        
+        <h4>{{poll.question}} | (Expires: {{poll.expiration_date.strftime('%m/%d/%Y')}})</h4>
+        <small>By: {{poll.created_by_user}}</small>
+        
+    </div>
+{% endfor %}
+<br>
+
+<h1>Expired Polls</h1>
+
+{% for poll in expired_polls %} 
+  
+  
+    <div class="expiredpoll">
+      <h4>{{poll.question}}</h4>
+    </div>
+  </a>
+
+{% endfor %}
+
+
+{% endblock %}
