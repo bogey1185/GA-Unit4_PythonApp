@@ -163,7 +163,7 @@ def stream():
     #get all active and expired polls that are public
     active_polls = models.Poll.select().where((models.Poll.expiration_date >= datetime.date.today()) & (models.Poll.private == 'public')).order_by(models.Poll.expiration_date)
     expired_polls = models.Poll.select().where((models.Poll.expiration_date < datetime.date.today()) & (models.Poll.private == 'public')).order_by(-models.Poll.date)
-
+    
     #in order to make sure database is continually updating and keeping the active property
     #properly set to True or False depending on whether poll is active, this quick loop runs when
     #the stream route is run. It updates active status for db entries based on date.
