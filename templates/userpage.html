@@ -2,19 +2,29 @@
 
 {% block content %}
 
-{% for polls in stream %}
-<div class = "allpolls">
+<h3>Active polls</h3>
+{% for polls in active_polls %}
+
     <div class = "activepolls">
-        <h3>Active polls</h3>
         
-            <!--looking for logic to see if the polls have expired.
-            Expired polls go below -->
-        {% endfor %}
+        <h4>{{poll.question}} | (Expires: {{poll.expiration_date.strftime('%m/%d/%Y')}})</h4>
+        <small>By: {{poll.created_by_user}}</small>
+        
     </div>
+{% endfor %}
 <br>
-    <div class = "expiredpolls">
-        <h3>Expired polls</h3>
+
+<h1>Expired Polls</h1>
+
+{% for poll in expired_polls %} 
+  
+  
+    <div class="expiredpoll">
+      <h4>{{poll.question}} | <small> By: {{poll.created_by_user}}</small></h4>
     </div>
-</div>
+  </a>
+
+{% endfor %}
+
 
 {% endblock %}
