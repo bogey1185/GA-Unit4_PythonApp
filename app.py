@@ -188,8 +188,10 @@ def show_poll(hashcode):
     #current poll id
     pollId = poll.__data__['id']
 
-    #if the poll activity is false (meaning expired), skip the rest -- just register it as voted upon so only results show. No voting allowed!
-    if poll.active == False:
+    #if the poll activity is false (meaning expired), or there is no login
+    #skip the rest -- just register it as voted upon so only results show. 
+    #No voting allowed!
+    if (poll.active == False) or (g.user._get_current_object().__dict__ == {}):
         return render_template('/show.html', poll=poll, responses=responses, vote=True) 
 
     #current user id
@@ -213,6 +215,7 @@ def show_poll(hashcode):
 
 #cast vote
 @app.route('/stream/<hashcode>/vote/<responseid>')
+@login_required
 def vote(hashcode, responseid):
 
     poll = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
@@ -232,6 +235,7 @@ def vote(hashcode, responseid):
         #################################
 
 @app.route('/stream/<hashcode>/follow/<poll>')
+@login_required
 def follow(hashcode, poll):
     #if already member and following poll
     record = models.Membership.select().where((models.Membership.poll_id == poll) & (models.Membership.user_id == g.user._get_current_object()))
