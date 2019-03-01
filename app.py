@@ -125,9 +125,7 @@ def new_poll():
             question        = form.question.data.strip(),
             private         = form.private.data
         )
-        print(new_poll.__data__['expiration_date'], "EXPIRY DATE")
-        # print(type(new_poll.__data__['expiration_date'], "DATATYPE FOR DATE"))
-        print(datetime.date.today(), "CURRENT DATE")
+       
         #make new membership entry to relate creator with poll
         new_member = models.Membership.create(
             user_id = g.user._get_current_object(),
@@ -176,6 +174,7 @@ def stream():
     return render_template('stream.html', active_polls=active_polls, expired_polls=expired_polls)
 
 #show specific poll
+
 @app.route('/stream/<hashcode>')
 def show_poll(hashcode):
 
@@ -184,13 +183,25 @@ def show_poll(hashcode):
     #get responses associated with poll
     responses = models.Response.select().where(models.Response.poll_id == poll.__data__['id']).order_by(models.Response.sequence)
     
-    #checks if current user voted on the poll
-    try:
-        vote = models.Vote.get(models.Vote.user_id == g.user._get_current_object() and models.Vote.poll_id == poll.__data__['id'])
-    except models.DoesNotExist:
-        vote = None
+    #current poll id
+    pollId = poll.__data__['id']
 
-    return render_template('/show.html', poll=poll, responses=responses, vote=vote)
+    #if the poll activity is false (meaning expired), skip the rest -- just register it as voted upon so only results show. No voting allowed!
+    if poll.active == False:
+        return render_template('/show.html', poll=poll, responses=responses, vote=True) 
+
+    #current user id
+    userId = g.user._get_current_object()
+
+    #grab all votes cast for current poll
+    votes = models.Vote.select().where(models.Vote.poll_id == pollId)
+
+    #loop over votes. If any were cast by current user, set voted to True. Else make it False
+    for vote in votes:
+        if vote.user_id == userId:
+            return render_template('/show.html', poll=poll, responses=responses, vote=True)
+
+    return render_template('/show.html', poll=poll, responses=responses, vote=False)
 
 #cast vote
 @app.route('/stream/<hashcode>/vote/<responseid>')
