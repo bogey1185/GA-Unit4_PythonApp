@@ -158,6 +158,7 @@ def new_poll():
 
 #show all public polls route
 @app.route('/stream')
+@app.route('/stream/')
 def stream():
     #get all active and expired polls that are public
     active_polls = models.Poll.select().where(models.Poll.expiration_date >= datetime.date.today() and models.Poll.private == 'public').order_by(models.Poll.expiration_date)
@@ -204,6 +205,12 @@ def show_poll(hashcode):
 
     return render_template('/show.html', poll=poll, responses=responses, vote=False)
 
+        #################################
+        #                               #
+        #        Vote route             #
+        #                               #
+        #################################
+
 #cast vote
 @app.route('/stream/<hashcode>/vote/<responseid>')
 def vote(hashcode, responseid):
@@ -217,6 +224,27 @@ def vote(hashcode, responseid):
     )
 
     return redirect('/stream/' + hashcode)
+
+        #################################
+        #                               #
+        #   follow/unfollow poll route  #
+        #                               #
+        #################################
+
+@app.route('/stream/<hashcode>/follow/<poll>')
+def follow(hashcode, poll):
+    #if already member and following poll
+    record = models.Membership.select().where((models.Membership.poll_id == poll) & (models.Membership.user_id == g.user._get_current_object()))
+    #if record exists, delete. if not, create it.
+    if record.exists():
+        models.Membership.delete().where((models.Membership.poll_id == poll) & (models.Membership.user_id == g.user._get_current_object())).execute()
+        return redirect('/stream/' + hashcode)
+    else:
+        created_rec = models.Membership.create(
+            poll_id = poll,
+            user_id = g.user._get_current_object()
+        )
+        return redirect('/stream/' + hashcode)
 
 if __name__ == '__main__':
     models.initialize()
