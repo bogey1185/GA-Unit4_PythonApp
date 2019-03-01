@@ -173,6 +173,18 @@ def stream():
             poll.active = False
             poll.save()
 
+
+    pollcount = models.Poll.select().count()
+    print(pollcount, "YEAHAHAHAHAH POLLCOUNT")
+
+    respcount = models.Response.select().count()
+    print(respcount, "YAYAYAYA RESP COUNT")
+
+    votecount = models.Vote.select().count()
+    print(votecount, "YAYAY VOTE COUNT")
+
+  
+
     return render_template('stream.html', active_polls=active_polls, expired_polls=expired_polls)
 
 #show specific poll
@@ -182,30 +194,41 @@ def show_poll(hashcode):
 
     #get poll
     poll = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
-    #get responses associated with poll
-    responses = models.Response.select().where(models.Response.poll_id == poll.__data__['id']).order_by(models.Response.sequence)
     
     #current poll id
     pollId = poll.__data__['id']
-
-    #if the poll activity is false (meaning expired), or there is no login
-    #skip the rest -- just register it as voted upon so only results show. 
-    #No voting allowed!
-    if (poll.active == False) or (g.user._get_current_object().__dict__ == {}):
-        return render_template('/show.html', poll=poll, responses=responses, vote=True) 
-
+    
     #current user id
     userId = g.user._get_current_object()
+    
+    #get responses associated with poll
+    responses = models.Response.select().where(models.Response.poll_id == pollId).order_by(models.Response.sequence)
 
-    #grab all votes cast for current poll
+    #grab all votes cast for current poll 
     votes = models.Vote.select().where(models.Vote.poll_id == pollId)
+
+    #how many people voted for each response? Let's see...
+    votecount = []
+    votetotal = 0
+
+    for response in responses:
+        respvotes = models.Vote.select().where(response.id == models.Vote.response_id).count()
+        votecount.append(respvotes)
+        votetotal += respvotes
+
+    vote_percentages = [round((num / votetotal)*100, 2) for num in votecount]
+    
+    #if the poll activity is false (meaning expired), or there is no login
+    # register it as voted upon so only results show. #No voting allowed!
+    if (poll.active == False) or (userId.__dict__ == {}):
+        return render_template('/show.html', poll=poll, responses=responses, vote=True, vote_percentages=vote_percentages, votecount=votecount) 
 
     #loop over votes. If any were cast by current user, set voted to True. Else make it False
     for vote in votes:
         if vote.user_id == userId:
-            return render_template('/show.html', poll=poll, responses=responses, vote=True)
+            return render_template('/show.html', poll=poll, responses=responses, vote=True, vote_percentages=vote_percentages, votecount=votecount)
 
-    return render_template('/show.html', poll=poll, responses=responses, vote=False)
+    return render_template('/show.html', poll=poll, responses=responses, vote=False, vote_percentages=vote_percentages, votecount=votecount)
 
         #################################
         #                               #

@@ -6,11 +6,11 @@
       <p>{{poll.question}} | {{poll.date}} | {{poll.hashcode}}</p>
     </div>
 
-
+      
   {% for response in responses %} 
 
     {% if vote %}
-      <p>bar</p>
+      <p>{{response.sequence}}. {{response.text}}: {{votecount[response.sequence - 1]}} {{'vote' if votecount[response.sequence - 1] == 1 else 'votes'}}. {{vote_percentages[response.sequence - 1]}}%</p>
 
     {% else %}
       <a href="/stream/{{poll.hashcode}}/vote/{{response.id}}"><p>{{response.sequence}}. {{response.text}}</p></a>
