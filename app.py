@@ -123,9 +123,16 @@ def new_poll():
             expiration_date = form.expiration_date.data,
             hashcode        = hash,
             question        = form.question.data.strip(),
-            private         = form.private.data
+            private         = form.private.data,
         )
-        
+
+        #if at time of creation, poll is expired, reset its active status to false
+        if new_poll.__data__['expiration_date'] < datetime.date.today():
+            new_poll.__data__['active'] = False
+        else:
+            new_poll.__data__['active'] = True
+        new_poll.save()
+  
         #make new membership entry to relate creator with poll
         new_member = models.Membership.create(
             user_id = g.user._get_current_object(),
@@ -177,28 +184,24 @@ def stream():
 
 
 #Userpage for specific user
-@app.route('/stream/userid')
+@app.route('/user')
+@login_required
 def user_page():
 
-    active_polls = models.Poll.select().where((models.Poll.expiration_date >= datetime.date.today()) & (models.Poll.created_by_user == models.User.username)).order_by(models.Poll.expiration_date)
-    expired_polls = models.Poll.select().where((models.Poll.expiration_date < datetime.date.today()) & (models.Poll.created_by_user == models.User.username)).order_by(-models.Poll.date)
+    #get all the memberships that include the current user
+    memberships = models.Membership.select().where(models.Membership.user_id == g.user._get_current_object())
+
+    #extract the poll ids from the memberships
+    poll_ids = [member.__dict__['__data__']['poll_id'] for member in memberships]    
     
-    if username and username != current_user.username:
-        
-        user = models.User.select().where(models.User.username**username).get()
-        
-        stream = user.posts.limit(10)
-    else:
-        stream = current_user.get_stream().limit(10)
-        user = current_user
-    if username:
-        template = 'userpage.html'
+    #query the poll ids into list comprehensions for active and inactive polls.
+    polls = [models.Poll.select().where(models.Poll.id == poll).get() for poll in poll_ids]
 
-
-
-    return render_template("stream.html", active_polls=active_polls, expired_polls=expired_polls )
-
-
+    #break polls into list of active and expired polls
+    active_polls = [poll for poll in polls if poll.__data__['active'] == True]
+    expired_polls = [poll for poll in polls if poll.__data__['active'] == False]
+    
+    return render_template('userpage.html', active_polls=active_polls, expired_polls=expired_polls )
 
 #show specific poll
 
