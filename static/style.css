@@ -5,3 +5,7 @@
 text {
   padding-left: 10px;
 }
+
+.activesmall {
+  display: block;
+}

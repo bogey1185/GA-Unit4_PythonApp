@@ -5,12 +5,11 @@
   <h1>Active Polls</h1>
   {% for poll in active_polls %} 
 
-    <a href="/stream/{{poll.hashcode}}">
       <div class="activepoll">
-        <h4>{{poll.question}} | (Expires: {{poll.expiration_date.strftime('%m/%d/%Y')}})</h4>
-        <small>By: {{poll.created_by_user}}</small>
+        <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> </h4>
+        <small class="activesmall">By: {{poll.created_by_user}}</small> 
+        <small class="activesmall">Poll Expires: {{poll.expiration_date.strftime('%m/%d/%Y')}}</small>
       </div>
-    </a>
 
   {% endfor %}
 
@@ -18,11 +17,9 @@
 
   {% for poll in expired_polls %} 
     
-    <a href="/stream/{{poll.hashcode}}">
       <div class="expiredpoll">
-        <h4>{{poll.question}} | <small> By: {{poll.created_by_user}}</small></h4>
+        <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> <small> By: {{poll.created_by_user}}</small></h4>
       </div>
-    </a>
 
   {% endfor %}
 

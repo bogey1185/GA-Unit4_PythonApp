@@ -185,6 +185,7 @@ def stream():
 
 #Userpage for specific user
 @app.route('/user')
+@app.route('/user/')
 @login_required
 def user_page():
 
@@ -201,7 +202,7 @@ def user_page():
     active_polls = [poll for poll in polls if poll.__data__['active'] == True]
     expired_polls = [poll for poll in polls if poll.__data__['active'] == False]
     
-    return render_template('userpage.html', active_polls=active_polls, expired_polls=expired_polls )
+    return render_template('userpage.html', active_polls=active_polls, expired_polls=expired_polls, user_id=g.user._get_current_object())
 
 #show specific poll
 
@@ -278,7 +279,7 @@ def vote(hashcode, responseid):
 @app.route('/stream/<hashcode>/follow/<poll>')
 @login_required
 def follow(hashcode, poll):
-    #if already member and following poll
+    #check if already member and following poll
     record = models.Membership.select().where((models.Membership.poll_id == poll) & (models.Membership.user_id == g.user._get_current_object()))
     #if record exists, delete. if not, create it.
     if record.exists():
