@@ -10,7 +10,7 @@ import forms
 app = Flask(__name__)
 
 #session key for cookies 
-app.secret_key = SECRET_KEY
+app.secret_key = 'LKSDFLKVNKNKSCNDMKLDMV SDLKMVNLKSD VSD'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
