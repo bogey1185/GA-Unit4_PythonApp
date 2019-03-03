@@ -387,10 +387,10 @@ def follow(hashcode, poll):
     return redirect('/stream/' + hashcode)
 
     
-if 'ON_HEROKU' in os.environ:
-    print('hitting ')
-    models.initialize()
-# if __name__ == '__main__':
+if __name__ == '__main__':
+  if 'ON_HEROKU' in os.environ:
+      print('hitting ')
+      models.initialize()
 #   models.initialize()
   # app.run(debug = config.DEBUG, port = config.PORT)
 
