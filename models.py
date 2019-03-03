@@ -1,10 +1,12 @@
+import os
 import datetime
 from peewee import *
+from playhouse.db_url import connect
 from flask_bcrypt import generate_password_hash
 from flask_login import UserMixin
 import config
 
-DATABASE = config.DATABASE
+DATABASE = connect(os.environ.get('DATABASE_URL'))
 
 class User(UserMixin, Model):
   username      = CharField(unique=True)

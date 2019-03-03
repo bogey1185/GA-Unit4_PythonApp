@@ -1,3 +1,4 @@
+import os
 from flask import Flask, g, render_template, flash, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_bcrypt import check_password_hash
@@ -386,8 +387,10 @@ def follow(hashcode, poll):
     return redirect('/stream/' + hashcode)
 
     
-
-if __name__ == '__main__':
-  models.initialize()
-  app.run(debug = config.DEBUG, port = config.PORT)
+if 'ON_HEROKU' in os.environ:
+    print('hitting ')
+    models.initialize()
+# if __name__ == '__main__':
+#   models.initialize()
+  # app.run(debug = config.DEBUG, port = config.PORT)
 
