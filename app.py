@@ -7,32 +7,7 @@ import config
 import models
 import forms
 
-# class HTTPMethodOverrideMiddleware(object):
-#     allowed_methods = frozenset([
-#         'GET',
-#         'HEAD',
-#         'POST',
-#         'DELETE',
-#         'PUT',
-#         'PATCH',
-#         'OPTIONS'
-#     ])
-#     bodyless_methods = frozenset(['GET', 'HEAD', 'OPTIONS', 'DELETE'])
-
-#     def __init__(self, app):
-#         self.app = app
-
-#     def __call__(self, environ, start_response):
-#         method = environ.get('HTTP_X_HTTP_METHOD_OVERRIDE', '').upper()
-#         if method in self.allowed_methods:
-#             method = method.encode('ascii', 'replace')
-#             environ['REQUEST_METHOD'] = method
-#         if method in self.bodyless_methods:
-#             environ['CONTENT_LENGTH'] = '0'
-#         return self.app(environ, start_response)
-
 app = Flask(__name__)
-# app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
 
 #session key for cookies 
 app.secret_key = config.SECRET_KEY
@@ -166,9 +141,10 @@ def new_poll():
     #gather field responses
     responses = [form.response1.data, form.response2.data, form.response3.data, form.response4.data]
 
+    print(responses, 'THESE ARE RESPONSES')
     #for any completed responses, create responses in sequence so they can be reconstructed later
     for i in range(1, 5):
-      if responses[i-1] != '':
+      # if responses[i-1] != '':
         new_response = models.Response.create(
           poll_id  = new_poll.__data__['id'],
           text     = responses[i-1],
@@ -235,16 +211,73 @@ def delete_poll(id):
   poll = models.Poll.get(models.Poll.id == id)
   poll.delete_instance(recursive=True)
 
-
   return redirect('/user')
 
-#Edit route for specific user
-@app.route('/user', methods=['PUT'])
-@app.route('/user/', methods=['PUT'])
+#edit route for poll - GET
+
+@app.route('/user/edit/<id>', methods=['GET'])
 @login_required
-def edit_poll():
-  
-  return 'Edit route'
+def edit_get(id):
+
+  #get the poll we are going to edit
+  poll = models.Poll.get(models.Poll.id == id)
+  #get the responses we are going to edit
+  responses = models.Response.select().where(models.Response.poll_id == id)
+  #make an array of the form data from the responses so it can be injected 
+  response_list = ['', '', '', '']
+  response_idx = 0
+  for response in responses:
+    response_list[response_idx] = response.__data__['text']
+    response_idx+=1
+
+  #create the form with the values pre-set
+  form = forms.PollForm(
+    expiration_date = poll.__data__['expiration_date'],
+    private = poll.__data__['private'],
+    question = poll.__data__['question'],
+    response1 = response_list[0],
+    response2 = response_list[1],
+    response3 = response_list[2],
+    response4 = response_list[3]
+  ) 
+
+  return render_template('edit.html', form=form)
+
+#edit route for poll - POST/PUT
+
+@app.route('/user/edit/<id>', methods=['POST'])
+@login_required
+def edit_post(id):
+
+  form = forms.PollForm()
+
+  #if submitted for is valid
+  if form.validate_on_submit():
+
+    #update the poll
+    poll_update = models.Poll.update({
+      models.Poll.expiration_date: form.expiration_date.data,
+      models.Poll.private: form.private.data,
+      models.Poll.question: form.question.data
+    }).where(models.Poll.id == id)
+    #execute the update
+    poll_update.execute()
+
+    #gather the response changes into an iterable list so each can be updated separately
+    #since each response is its own db entry
+    response_list = [form.response1.data, form.response2.data, form.response3.data, form.response4.data]
+    index = 1
+    for response in response_list:
+      response_update = models.Response.update({models.Response.text: response}).where((models.Response.poll_id == id) & (models.Response.sequence == index))
+      response_update.execute()
+      index += 1
+
+    flash('Your poll have been updated', 'success')
+    return redirect(url_for('stream'))
+
+  else:
+
+    return redirect(f'/user/edit/{id}')
 
 #show specific poll
 
