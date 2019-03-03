@@ -6,15 +6,9 @@
   {% for poll in active_polls %} 
 
       <div class="activepoll">
-        <form id="polldelete" action="/stream" method="">
-          <input type="hidden" value="{{poll.id}}">
-        </form>
-        <form id="polledit" action="/stream" method="">
-          <input type="hidden" value="{{poll.id}}">
-        </form>
         <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> 
           {% if poll.created_by == user_id %}
-            <button type="submit" form="polledit">Edit</button>   <button type="submit" form="polldelete">Delete</button>
+            <a href="/user/edit/{{poll.id}}"><small>(edit)</small></a> <a href="/user/delete/{{poll.id}}"><small>(delete)</small></a>
           {% endif %}
         </h4>
       </div>
@@ -26,11 +20,11 @@
   <h1>Expired Polls</h1>
 
   {% for poll in expired_polls %} 
-    
+
       <div class="expiredpoll">
         <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> <small> By: {{poll.created_by_user}}</small>
           {% if poll.created_by == user_id %}
-            <button>Delete</button>
+            <a href="/user/edit/{{poll.id}}"><small>(edit)</small></a> <a href="/user/delete/{{poll.id}}"><small>(delete)</small></a>
           {% endif %}
         </h4>
         
