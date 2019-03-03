@@ -391,7 +391,7 @@ if 'ON_HEROKU' in os.environ:
     print('hitting ')
     models.initialize()
     
-# if __name__ == '__main__':
-#   models.initialize()
-  # app.run(debug = config.DEBUG, port = config.PORT)
+if __name__ == '__main__':
+  models.initialize()
+  app.run(debug = config.DEBUG, port = config.PORT)
 
