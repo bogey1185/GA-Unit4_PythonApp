@@ -4,14 +4,13 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from flask_bcrypt import check_password_hash
 import datetime
 import random
-import config
 import models
 import forms
 
 app = Flask(__name__)
 
 #session key for cookies 
-app.secret_key = config.SECRET_KEY
+app.secret_key = SECRET_KEY
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -393,5 +392,5 @@ if 'ON_HEROKU' in os.environ:
     
 if __name__ == '__main__':
   models.initialize()
-  app.run(debug = config.DEBUG, port = config.PORT)
+  # app.run(debug = config.DEBUG, port = config.PORT)
 

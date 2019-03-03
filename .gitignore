@@ -1,5 +1,4 @@
 .env
-config.py
 pollsterdatabase.sqlite
 .DS_Store
 __pycache__
