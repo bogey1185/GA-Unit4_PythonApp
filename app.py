@@ -182,7 +182,6 @@ def stream():
 
   return render_template('stream.html', active_polls=active_polls, expired_polls=expired_polls)
 
-
 #Userpage for specific user
 @app.route('/user')
 @app.route('/user/')
@@ -203,6 +202,63 @@ def user_page():
   expired_polls = [poll for poll in polls if poll.__data__['active'] == False]
   
   return render_template('userpage.html', active_polls=active_polls, expired_polls=expired_polls, user_id=g.user._get_current_object())
+  
+        #################################
+        #                               #
+        #        Show poll route        #
+        #                               #
+        #################################
+
+#show specific poll
+
+@app.route('/stream/<hashcode>')
+def show_poll(hashcode):
+
+  #get poll
+  poll = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
+  
+  #current poll id
+  pollId = poll.__data__['id']
+  
+  #current user id
+  userId = g.user._get_current_object()
+  
+  #get responses associated with poll
+  responses = models.Response.select().where(models.Response.poll_id == pollId).order_by(models.Response.sequence)
+
+  #grab all votes cast for current poll 
+  votes = models.Vote.select().where(models.Vote.poll_id == pollId)
+
+  #how many people voted for each response? Let's see...
+  votecount = []
+  votetotal = 0
+
+  for response in responses:
+    respvotes = models.Vote.select().where(response.id == models.Vote.response_id).count()
+    votecount.append(respvotes)
+    votetotal += respvotes
+
+  #need to set this in a ternary because before you have your first vote, you will get a divide by zero error 
+  # due to the num / votetotal
+  vote_percentages = [round((num / votetotal)*100, 2) for num in votecount] if votetotal > 0 else [0, 0, 0, 0]
+  
+  #if the poll activity is false (meaning expired), or there is no login
+  # register it as voted upon so only results show. #No voting allowed!
+  if (poll.active == False) or (userId.__dict__ == {}):
+    return render_template('/show.html', poll=poll, responses=responses, vote=True, vote_percentages=vote_percentages, votecount=votecount) 
+
+  #loop over votes. If any were cast by current user, set voted to True. Else make it False
+  for vote in votes:
+    if vote.user_id == userId:
+      return render_template('/show.html', poll=poll, responses=responses, vote=True, vote_percentages=vote_percentages, votecount=votecount)
+
+  return render_template('/show.html', poll=poll, responses=responses, vote=False, vote_percentages=vote_percentages, votecount=votecount)
+
+        #################################
+        #                               #
+        #        Delete route           #
+        #                               #
+        #################################
 
 #Delete route for polls
 @app.route('/user/delete/<id>')
@@ -212,6 +268,12 @@ def delete_poll(id):
   poll.delete_instance(recursive=True)
 
   return redirect('/user')
+
+        #################################
+        #                               #
+        #        Edit routes            #
+        #                               #
+        #################################
 
 #edit route for poll - GET
 
@@ -273,56 +335,12 @@ def edit_post(id):
       index += 1
 
     flash('Your poll have been updated', 'success')
-    return redirect(url_for('stream'))
+    return redirect(url_for('user_page'))
 
   else:
 
     return redirect(f'/user/edit/{id}')
 
-#show specific poll
-
-@app.route('/stream/<hashcode>')
-def show_poll(hashcode):
-
-  #get poll
-  poll = models.Poll.select().where(models.Poll.hashcode == hashcode).get()
-  
-  #current poll id
-  pollId = poll.__data__['id']
-  
-  #current user id
-  userId = g.user._get_current_object()
-  
-  #get responses associated with poll
-  responses = models.Response.select().where(models.Response.poll_id == pollId).order_by(models.Response.sequence)
-
-  #grab all votes cast for current poll 
-  votes = models.Vote.select().where(models.Vote.poll_id == pollId)
-
-  #how many people voted for each response? Let's see...
-  votecount = []
-  votetotal = 0
-
-  for response in responses:
-    respvotes = models.Vote.select().where(response.id == models.Vote.response_id).count()
-    votecount.append(respvotes)
-    votetotal += respvotes
-
-  #need to set this in a ternary because before you have your first vote, you will get a divide by zero error 
-  # due to the num / votetotal
-  vote_percentages = [round((num / votetotal)*100, 2) for num in votecount] if votetotal > 0 else [0, 0, 0, 0]
-  
-  #if the poll activity is false (meaning expired), or there is no login
-  # register it as voted upon so only results show. #No voting allowed!
-  if (poll.active == False) or (userId.__dict__ == {}):
-    return render_template('/show.html', poll=poll, responses=responses, vote=True, vote_percentages=vote_percentages, votecount=votecount) 
-
-  #loop over votes. If any were cast by current user, set voted to True. Else make it False
-  for vote in votes:
-    if vote.user_id == userId:
-      return render_template('/show.html', poll=poll, responses=responses, vote=True, vote_percentages=vote_percentages, votecount=votecount)
-
-  return render_template('/show.html', poll=poll, responses=responses, vote=False, vote_percentages=vote_percentages, votecount=votecount)
 
         #################################
         #                               #
@@ -366,6 +384,8 @@ def follow(hashcode, poll):
       user_id = g.user._get_current_object()
     )
     return redirect('/stream/' + hashcode)
+
+    
 
 if __name__ == '__main__':
   models.initialize()
