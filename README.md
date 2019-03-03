@@ -4,6 +4,8 @@ Pollster is a simple, free, easy-to-use web application that allows users to cre
 
 ## About the Authors
 
+My name is David Bogaerts.
+
 ## Getting Started/Installation Notes/System Specifications
 
 This application works on all modern web browsers.
