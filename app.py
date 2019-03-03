@@ -8,6 +8,7 @@ import models
 import forms
 
 app = Flask(__name__)
+# app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
 
 #session key for cookies 
 app.secret_key = config.SECRET_KEY

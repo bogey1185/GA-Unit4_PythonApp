@@ -6,9 +6,15 @@
   {% for poll in active_polls %} 
 
       <div class="activepoll">
+        <form id="polldelete" action="/stream" method="">
+          <input type="hidden" value="{{poll.id}}">
+        </form>
+        <form id="polledit" action="/stream" method="">
+          <input type="hidden" value="{{poll.id}}">
+        </form>
         <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> 
           {% if poll.created_by == user_id %}
-            &nbsp<button>Edit</button>   <button>Delete</button>
+            <button type="submit" form="polledit">Edit</button>   <button type="submit" form="polldelete">Delete</button>
           {% endif %}
         </h4>
       </div>
