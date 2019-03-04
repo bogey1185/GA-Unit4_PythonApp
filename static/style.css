@@ -116,13 +116,13 @@ header {
 
   /* LOGIN */
 
-.loginform {
+.authform {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.loginform input {
+.authform input {
   width: 20vw;
   font-size: 15px;
   font-family: 'Dosis', sans-serif;
@@ -130,14 +130,28 @@ header {
   margin: 5px 0;
 }
 
-.loginform button {
+.authform button {
   width: 7vw;
   font-size: 10px;
   font-family: 'Dosis', sans-serif;
   text-align: center;
+  padding: 4px;
+  margin-bottom: 5px;
 }
 
-.loginform a {
+.authform a {
+  color: blue;
+}
+
+  /* STREAM */
+
+.activepoll a {
+  text-decoration: none;
+  color: blue;
+}
+
+.expiredpoll a {
+  text-decoration: none;
   color: blue;
 }
 
