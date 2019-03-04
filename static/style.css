@@ -62,7 +62,7 @@ header {
 .greeting h3 {
   text-align: right;
   margin: 0;
-  padding: 10px;
+  padding: 10px 0 0 0;
 }
 
   /*BODY - HOME*/
@@ -175,6 +175,14 @@ header {
 .field ul {
   display: inline;
   list-style: none;
+}
+
+.newpoll h1 {
+  margin-top: 0;
+}
+
+.newpoll h4 {
+  margin: 10px;
 }
 
   /* SHOW */

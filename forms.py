@@ -77,13 +77,13 @@ class LoginForm(Form):
 class PollForm(Form):
   expiration_date = DateField(validators=[DataRequired()])
   private   = RadioField(
-    'Is this poll public or private?', 
+    'Is this poll public or private?*', 
     choices=[('public','Public'),('private','Private')],
     validators=[DataRequired()]
   )
-  question  = TextAreaField('Your poll question...', validators=[DataRequired()])
-  response1 = TextAreaField('Response A', validators=[DataRequired()])
-  response2 = TextAreaField('Response B', validators=[DataRequired()])
+  question  = TextAreaField('Your poll question...*', validators=[DataRequired()])
+  response1 = TextAreaField('Response A*', validators=[DataRequired()])
+  response2 = TextAreaField('Response B*', validators=[DataRequired()])
   response3 = TextAreaField('Response C', default=None)
   response4 = TextAreaField('Response D', default=None)
 
