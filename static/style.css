@@ -164,6 +164,10 @@ header {
   list-style-type: none;
 }
 
+.allpolls {
+  overflow-y: scroll;
+}
+
 .graphbar {
   display: flex;
 }

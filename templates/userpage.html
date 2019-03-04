@@ -1,35 +1,37 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+  <div class="allpolls">
+    <h1>Active Polls</h1>
+    {% for poll in active_polls %} 
 
-  <h1>Active Polls</h1>
-  {% for poll in active_polls %} 
+        <div class="activepoll">
+          <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> 
+            {% if poll.created_by == user_id %}
+              <a href="/user/edit/{{poll.id}}"><small>(edit)</small></a> <a href="/user/delete/{{poll.id}}"><small>(delete)</small></a>
+            {% endif %}
+          </h4>
+        </div>
+        <small class="activesmall">By: {{poll.created_by_user}}</small>
+        <small class="activesmall">Expires: {{poll.expiration_date.strftime('%m/%d/%Y')}}</small>
 
-      <div class="activepoll">
-        <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> 
-          {% if poll.created_by == user_id %}
-            <a href="/user/edit/{{poll.id}}"><small>(edit)</small></a> <a href="/user/delete/{{poll.id}}"><small>(delete)</small></a>
-          {% endif %}
-        </h4>
-      </div>
-      <small class="activesmall">By: {{poll.created_by_user}}</small>
-      <small class="activesmall">Expires: {{poll.expiration_date.strftime('%m/%d/%Y')}}</small>
+    {% endfor %}
 
-  {% endfor %}
+    <h1>Expired Polls</h1>
 
-  <h1>Expired Polls</h1>
+    {% for poll in expired_polls %} 
 
-  {% for poll in expired_polls %} 
+        <div class="expiredpoll">
+          <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> <small> By: {{poll.created_by_user}}</small>
+            {% if poll.created_by == user_id %}
+              <a href="/user/edit/{{poll.id}}"><small>(edit)</small></a> <a href="/user/delete/{{poll.id}}"><small>(delete)</small></a>
+            {% endif %}
+          </h4>
+          
+        </div>
 
-      <div class="expiredpoll">
-        <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> <small> By: {{poll.created_by_user}}</small>
-          {% if poll.created_by == user_id %}
-            <a href="/user/edit/{{poll.id}}"><small>(edit)</small></a> <a href="/user/delete/{{poll.id}}"><small>(delete)</small></a>
-          {% endif %}
-        </h4>
-        
-      </div>
-
-  {% endfor %}
+    {% endfor %}
+    
+  </div>
 
 {% endblock %}
