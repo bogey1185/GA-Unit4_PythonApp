@@ -176,6 +176,10 @@ text {
   padding-left: 10px;
 }
 
+.content {
+  overflow-y: scroll;
+}
+
 .activesmall {
   display: block;
 }
