@@ -3,8 +3,9 @@
 {% block content %}
 
   <h1>Active Polls</h1>
-  {% for poll in active_polls %}
 
+  {% for poll in active_polls %}
+      <hr>
       <div class="activepoll">
         <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> </h4>
         <small class="activesmall">By: {{poll.created_by_user}}</small> 
@@ -12,15 +13,16 @@
       </div>
 
   {% endfor %}
-
+  <hr>
   <h1>Expired Polls</h1>
 
   {% for poll in expired_polls %} 
-
+    <hr>
       <div class="expiredpoll">
         <h4><a href="/stream/{{poll.hashcode}}">{{poll.question}}</a> <small> By: {{poll.created_by_user}}</small></h4>
       </div>
 
   {% endfor %}
-
+  <hr>
+  
 {% endblock %}

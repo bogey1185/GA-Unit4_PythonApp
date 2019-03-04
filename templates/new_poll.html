@@ -2,7 +2,7 @@
 {% from 'macros.html' import render_field %}
 
 {% block content %}
-
+<div class="newpoll"></div>
   <form action="" method="POST">
     {{ form.hidden_tag() }}
 
@@ -16,5 +16,5 @@
     {% endfor %}
     <button type="submit">Submit Poll</button>
   </form>
-
+</div>
 {% endblock %}

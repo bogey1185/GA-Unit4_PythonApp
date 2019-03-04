@@ -155,6 +155,15 @@ header {
   color: blue;
 }
 
+#follow {
+  text-decoration: none;
+  color: blue;
+}
+
+.newpoll ul {
+  list-style-type: none;
+}
+
 .graphbar {
   display: flex;
 }

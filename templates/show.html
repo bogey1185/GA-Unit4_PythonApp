@@ -1,9 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
+    
+    <h4>Invitation code: <b>{{poll.hashcode}}</b></h4>
     <div>
-      <p>{{poll.question}} | {{poll.date}} | {{poll.hashcode}}</p>
+      <h2>{{poll.question}} | <small>Created: {{poll.date.strftime('%m/%d/%Y')}} </small> </h2>
     </div>
       
   {% for response in responses %} 
@@ -34,13 +35,13 @@
         </div>
 
       {% else %}
-        <a href="/stream/{{poll.hashcode}}/vote/{{response.id}}"><p>{{response.sequence}}. {{response.text}}</p></a>
+        <p>{{response.sequence}}. <a href="/stream/{{poll.hashcode}}/vote/{{response.id}}">{{response.text}}</p></a>
 
       {% endif %}
     {% endif %}
 
   {% endfor %}
-
-  <a href="/stream/{{poll.hashcode}}/follow/{{poll.id}}">Follow/Unfollow</a>
+  <br>
+  <a href="/stream/{{poll.hashcode}}/follow/{{poll.id}}" id="follow">Follow/Unfollow</a>
 
 {% endblock %}
