@@ -161,9 +161,23 @@ header {
   color: blue;
 }
 
-.newpoll ul {
-  list-style-type: none;
+  /* CREATE/EDIT */
+
+#question, #response1, #response2, #response3, #response4 {
+  width: 40vw;
 }
+
+#question {
+  width: 40vw;
+  height: 10vh;
+}
+
+.field ul {
+  display: inline;
+  list-style: none;
+}
+
+  /* SHOW */
 
 .graphbar {
   display: flex;

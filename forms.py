@@ -81,11 +81,11 @@ class PollForm(Form):
     choices=[('public','Public'),('private','Private')],
     validators=[DataRequired()]
   )
-  question  = StringField('Your poll question...', validators=[DataRequired()])
-  response1 = StringField('Response A', validators=[DataRequired()])
-  response2 = StringField('Response B', validators=[DataRequired()])
-  response3 = StringField('Response C', default=None)
-  response4 = StringField('Response D', default=None)
+  question  = TextAreaField('Your poll question...', validators=[DataRequired()])
+  response1 = TextAreaField('Response A', validators=[DataRequired()])
+  response2 = TextAreaField('Response B', validators=[DataRequired()])
+  response3 = TextAreaField('Response C', default=None)
+  response4 = TextAreaField('Response D', default=None)
 
 
 
