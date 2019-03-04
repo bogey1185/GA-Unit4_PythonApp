@@ -88,11 +88,35 @@ header {
   border: 1px solid lightgrey;
 }
 
+.bodynav-browse:hover {
+  width: 20vw;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid lightgrey;
+  background-color: black;
+}
+
+.bodynav-browse a:hover {
+  color: white;
+}
+
 .bodynav-create {
   width: 20vw;
   text-align: center;
   padding: 10px;
   border: 1px solid lightgrey;
+}
+
+.bodynav-create:hover {
+  width: 20vw;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid lightgrey;
+  background-color: black;
+}
+
+.bodynav-create a:hover {
+  color: white;
 }
 
 .bodynav-code {
@@ -165,11 +189,17 @@ header {
 
 #question, #response1, #response2, #response3, #response4 {
   width: 40vw;
+  font-size: 16px;
+  font-family: 'Dosis', sans-serif;
 }
 
 #question {
   width: 40vw;
   height: 10vh;
+}
+
+#expiration_date {
+  font-family: 'Dosis', sans-serif;
 }
 
 .field ul {
