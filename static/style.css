@@ -56,6 +56,7 @@ header {
   border-right: 1px solid lightgrey;
   border-bottom: 1px solid lightgrey;
   font-family: 'Dosis', sans-serif;
+  overflow-y: scroll;
 }
 
 .greeting h3 {
@@ -164,20 +165,12 @@ header {
   list-style-type: none;
 }
 
-.allpolls {
-  overflow-y: scroll;
-}
-
 .graphbar {
   display: flex;
 }
 
 text {
   padding-left: 10px;
-}
-
-.content {
-  overflow-y: scroll;
 }
 
 .activesmall {

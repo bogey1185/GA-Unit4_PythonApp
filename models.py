@@ -1,5 +1,6 @@
 import os
 import datetime
+# import config
 from peewee import *
 from playhouse.db_url import connect
 from flask_bcrypt import generate_password_hash
@@ -7,6 +8,7 @@ from flask_login import UserMixin
 
 
 DATABASE = connect(os.environ.get('DATABASE_URL'))
+# DATABASE = config.DATABASE
 
 class User(UserMixin, Model):
   username      = CharField(unique=True)

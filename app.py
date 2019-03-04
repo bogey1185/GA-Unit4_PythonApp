@@ -6,6 +6,7 @@ import datetime
 import random
 import models
 import forms
+# import config
 
 app = Flask(__name__)
 
