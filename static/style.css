@@ -1,3 +1,160 @@
+
+/*HEADER*/
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 0 10%;
+  border-bottom: 1px solid lightgrey;
+}
+
+.nav {
+  width: 50%;
+  text-align: right;
+}
+
+.navlink {
+  text-align: right;
+}
+
+.navlink a {
+  text-decoration: none;
+  color: black;
+  font-family: 'Dosis', sans-serif;
+  padding:2px 5px;
+  border: 1px solid lightgrey;
+}
+
+.navlink a:hover {
+  background-color: black;
+  color: white;
+}
+
+.logo {
+  width: 50%;
+  text-align: left;
+}
+
+.logo img {
+  width: 20%;
+}
+
+/*BODY*/
+
+.container {
+  height: 89vh;
+  margin: 0 10%;
+  padding: 0 2%;
+  border-left: 1px solid lightgrey;
+  border-right: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+  font-family: 'Dosis', sans-serif;
+}
+
+.greeting h3 {
+  text-align: right;
+  margin: 0;
+  padding: 10px;
+}
+
+  /*BODY - HOME*/
+
+.bodynav {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.bodynav a {
+  text-decoration: none;
+  color: black;
+  font-size: 3em;
+  padding: 0 20px;
+}
+
+.bodynav-browse {
+  width: 20vw;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid lightgrey;
+}
+
+.bodynav-create {
+  width: 20vw;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid lightgrey;
+}
+
+.bodynav-code {
+  font-size: 2em;
+  width: 20vw;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid lightgrey;
+}
+
+.bodynav-code input {
+  width: 80%;
+  font-size: 15px;
+  font-family: 'Dosis', sans-serif;
+}
+
+.bodynav-code button {
+  width: 40%;
+  font-size: 20px;
+  font-family: 'Dosis', sans-serif;
+}
+
+  /* LOGIN */
+
+.authform {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.authform input {
+  width: 20vw;
+  font-size: 15px;
+  font-family: 'Dosis', sans-serif;
+  padding: 5px;
+  margin: 5px 0;
+}
+
+.authform button {
+  width: 7vw;
+  font-size: 10px;
+  font-family: 'Dosis', sans-serif;
+  text-align: center;
+  padding: 4px;
+  margin-bottom: 5px;
+}
+
+.authform a {
+  color: blue;
+}
+
+  /* STREAM */
+
+.activepoll a {
+  text-decoration: none;
+  color: blue;
+}
+
+.expiredpoll a {
+  text-decoration: none;
+  color: blue;
+}
+
 .graphbar {
   display: flex;
 }
